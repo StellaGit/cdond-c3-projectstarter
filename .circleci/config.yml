@@ -293,10 +293,7 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
-      - destroy-environment:
-          stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-      - destroy-environment:
-          stackname: "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"       
+      
 workflows:
   default:
     jobs:
