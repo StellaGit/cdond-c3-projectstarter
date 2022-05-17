@@ -97,7 +97,7 @@ jobs:
              cd frontend
              npm install
              npm audit fix --audit-level=critical
-             npm audit --audit-level=critical
+           #  npm audit --audit-level=critical
       - save_cache:
           paths: [frontend/scan]
           key: scan-frontend
@@ -115,7 +115,7 @@ jobs:
              cd backend
              npm install
              npm audit fix --audit-level=critical
-             npm audit --audit-level=critical
+            # npm audit --audit-level=critical
       - save_cache:
           paths: [backend/scan]
           key: scan-backend
@@ -133,7 +133,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=ssudacity \
+              --tags project=udapeople-backend \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
           # exit 1
@@ -142,7 +142,7 @@ jobs:
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=ssudacity \
+              --tags project=udapeople-frontend \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
           #exit 1
