@@ -97,6 +97,7 @@ jobs:
              cd frontend
              npm install
              npm audit fix --audit-level=critical
+             npm audit --audit-level=critical
       - save_cache:
           paths: [frontend/scan]
           key: scan-frontend
@@ -114,6 +115,7 @@ jobs:
              cd backend
              npm install
              npm audit fix --audit-level=critical
+             npm audit --audit-level=critical
       - save_cache:
           paths: [backend/scan]
           key: scan-backend
