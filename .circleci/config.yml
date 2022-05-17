@@ -221,9 +221,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       # Checkout code from git
-      - checkout
-      - attach_workspace:
-          at: .      
+      - checkout   
       - run:
           name: Install dependencies  tar gzip
           command: |
@@ -236,20 +234,7 @@ jobs:
           name: Install dependencies awscli
           command: |
             yum -y install awscli
-      - run:
-          name: Install dependencies python3
-          command: |
-            yum -y install python3
-      - run:
-          name: Install dependencies npm
-          command: |
-            npm install
-            npm run build
-      - run:
-          name: Install dependencies ansible
-          command: |
-            apk add --update ansible
-
+            
       - run:
           name: Get backend url
           command: |
