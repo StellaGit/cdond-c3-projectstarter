@@ -149,9 +149,9 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ~/
+          root: ansible
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - inventory.txt
       - destroy-environment:
           stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment:
@@ -169,7 +169,7 @@ jobs:
           fingerprints: ["4e:27:4b:b1:89:2e:f2:9a:22:b2:2b:8e:db:39:e8:ab"]
       # attach workspace
       - attach_workspace:
-          at: .circleci/ansible/ 
+          at: /tmp/ansible/ 
         # at: .circleci/ansible/ - i thik it should be '.'
       - run:
           name: Install dependencies
@@ -180,8 +180,8 @@ jobs:
       - run:
           name: Configure server  
           command: |
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
+
+            ansible-playbook -i /tmp/ansible/inventory.txt configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
       - destroy-environment:
