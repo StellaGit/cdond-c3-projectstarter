@@ -171,7 +171,6 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/ 
-        # at: .circleci/ansible/ - it's not working
       - run:
           name: Install dependencies
           command: |
@@ -181,8 +180,8 @@ jobs:
       - run:
           name: Configure server  
           command: |
-            cat .circleci/ansible/inventory.txt
-            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ls /root/project/backend/ 
+            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
 
