@@ -151,7 +151,7 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> backend/inventory.txt
-              cat .circleci/ansible/inventory.txt
+              cat backend/inventory.txt
       - persist_to_workspace:
           root: backend
           paths:
@@ -183,6 +183,7 @@ jobs:
       - run:
           name: Configure server  
           command: |
+            export ANSIBLE_HOST_KEY_CHECKING=False
             cat /tmp/backend/inventory.txt
             ansible-playbook -i /tmp/backend/inventory.txt .circleci/ansible/configure-server.yml
           #  exit 1
