@@ -182,6 +182,7 @@ jobs:
       - run:
           name: Configure server  
           command: |
+            cat /tmp/backend/inventory.txt
             ansible-playbook -i /tmp/backend/inventory.txt .circleci/ansible/configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
