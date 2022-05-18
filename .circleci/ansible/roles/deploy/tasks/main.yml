@@ -6,12 +6,18 @@
     update_cache: yes
 
 
-
+- name: Move backend dist files to remote server
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu
 
 - name: "deploy role - start the app"
   become: true
   shell: |
     cd /home/ubuntu/backend
     npm install
+    npm run build
     pm2 stop default
     pm2 start npm -- run start
+  args:
+    chdir: /home/ubuntu/backend/dist
