@@ -207,8 +207,9 @@ jobs:
           command: |
             cd backend
             npm install
-            npm run migrations > migrations_dump.txt
             npm audit fix
+            npm run migrations > migrations_dump.txt
+
           #  exit 1
       - run:
           name: Send migration results to memstash
@@ -216,6 +217,7 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 curl https://kvdb.io/FS3hVsEzwoNt2BqndJbxfb/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            else '0'
             fi
           # 
           #  exit 1
@@ -300,15 +302,16 @@ jobs:
             cd ..
             tar -C backend -czvf artifact.tar.gz .
             pwd
+            echo "[web]" >> ~/root/project/backend/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory.txt
+              --output text >> ~/root/project/backend/inventory.txt
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
 
-              cat inventory.txt
+              cat ~/root/project/backend/inventory.txt
       
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            ansible-playbook -i ~/root/project/backend/inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
   
   smoke-test:
@@ -362,8 +365,8 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
+    #  - deploy-frontend:
+    #      requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
       - smoke-test:
