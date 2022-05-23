@@ -296,19 +296,19 @@ jobs:
             cd backend
             npm install
             npm run build
-            echo "[web]" >> backend/inventory.txt
+            pwd
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            pwd
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> backend/inventory.txt
-            cd ..
-
-            tar -C backend -czvf artifact.tar.gz .
+              --output text >> inventory.txt
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
 
-              cat backend/inventory.txt
+              cat inventory.txt
       
-            ansible-playbook -i backend/inventory.txt deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
   
   smoke-test:
