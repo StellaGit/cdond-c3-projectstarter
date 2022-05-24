@@ -322,11 +322,7 @@ jobs:
       - run: 
           name: depend
           command: 
-             apk add --update ansible curl rsync openssh nodejs npm
-             ansible --version
-             pip install awscli
-             pip install --upgrade pip
-             aws --version
+             sudo apt-get install curl python python-pip && pip install awscli
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
