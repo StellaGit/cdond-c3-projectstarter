@@ -320,12 +320,16 @@ jobs:
       - image: alpine:latest
     steps:
       - run: apk add --update curl
+             pip install awscli
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
             
-
-            echo "${API_URL}"
+            export BACKEND_IP = $(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            export API_URL="http://${BACKEND_IP}:3030"  
+            echo "${API_URL}" > backend/.env
          
 
             if curl "${API_URL}/api/status" | grep "ok"
