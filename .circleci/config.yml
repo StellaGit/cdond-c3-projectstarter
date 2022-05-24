@@ -317,7 +317,7 @@ jobs:
   
   smoke-test:
     docker:
-      - image: alpine:latest
+      - image: python:3.7-alpine3.11
     steps:
       - run: apk add --update ansible curl rsync openssh nodejs npm
              ansible --version
@@ -327,8 +327,9 @@ jobs:
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
-            
-            export BACKEND_IP = $(aws ec2 describe-instances \
+            npm install
+            npm run build           
+            BACKEND_IP = $(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"  
