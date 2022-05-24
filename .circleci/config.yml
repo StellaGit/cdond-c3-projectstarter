@@ -309,7 +309,7 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
 
               cat /root/project/backend/inventory.txt
-      
+            export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i /root/project/backend/inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure 
   
