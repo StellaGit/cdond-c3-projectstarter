@@ -319,8 +319,11 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
-      - run: apk add --update curl
+      - run: apk add --update ansible curl rsync openssh nodejs npm
+             ansible --version
              pip install awscli
+             pip install --upgrade pip
+             aws --version
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
