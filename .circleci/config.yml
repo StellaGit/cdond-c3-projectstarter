@@ -317,9 +317,12 @@ jobs:
   
   smoke-test:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: circleci/node:13.8.0
     steps:
-      - run: apk add --update ansible curl rsync openssh nodejs npm
+      - run: 
+          name: depend
+          command: 
+             apk add --update ansible curl rsync openssh nodejs npm
              ansible --version
              pip install awscli
              pip install --upgrade pip
@@ -327,9 +330,8 @@ jobs:
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
-            npm install
-            npm run build           
-            BACKEND_IP = $(aws ec2 describe-instances \
+          
+            export BACKEND_IP = $(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"  
@@ -367,18 +369,18 @@ workflows:
     #      requires: [build-frontend]
     #  - scan-backend:
     #      requires: [build-backend]
-      - deploy-infrastructure:
-          requires: [build-frontend, build-backend]
+#      - deploy-infrastructure:
+#          requires: [build-frontend, build-backend]
     #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
+#      - configure-infrastructure:
+#          requires: [deploy-infrastructure]
+#      - run-migrations:
+#          requires: [configure-infrastructure]
+#      - deploy-frontend:
+#          requires: [run-migrations]
+#      - deploy-backend:
+#          requires: [run-migrations]
         #  requires: [configure-infrastructure]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
+      - smoke-test
+        #  requires: [deploy-backend, deploy-frontend]
         #  requires: [deploy-backend]
