@@ -28,8 +28,7 @@
   shell: |
     cd /home/ubuntu/backend
     tar xvzf artifact.tar.gz -C .
-  args:
-    chdir: /root/backend
+
 
 - name: install start the app
   become: true
