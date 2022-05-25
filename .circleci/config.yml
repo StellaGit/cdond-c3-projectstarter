@@ -116,6 +116,7 @@ jobs:
              npm install
              npm audit fix --audit-level=critical 
              npm install --save-dev webpack@5.72.1
+             npm install --save-dev nodemon@2.0.16
              npm audit --audit-level=critical
 
 
