@@ -115,7 +115,8 @@ jobs:
              cd backend
              npm install
              npm audit fix --audit-level=critical 
-            #npm audit --audit-level=critical
+             npm install --save-dev webpack@5.72.1
+             npm audit --audit-level=critical
 
 
   deploy-infrastructure:
@@ -149,15 +150,15 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            echo "[web]" >> backend/inventory.txt
+            echo "[web]" >> .circleci/ansible/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> backend/inventory.txt
-              cat backend/inventory.txt
+              --output text >> .circleci/ansible/inventory.txt
+              cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: backend
+          root: /~
           paths:
-            - inventory.txt
+            - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           stackname: "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment:
@@ -175,7 +176,7 @@ jobs:
           fingerprints: ["4e:27:4b:b1:89:2e:f2:9a:22:b2:2b:8e:db:39:e8:ab"]
       # attach workspace
       - attach_workspace:
-          at: ~/project 
+          at: ~/ 
       - run:
           name: Install dependencies
           command: |
@@ -186,21 +187,12 @@ jobs:
             pip install awscli --upgrade
             apk add --update ansible
           #exit 1
-      - run:
-          name: Check back-end ip and save to ansible inventory
-          command: |
 
-            aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> .circleci/ansible/inventory.txt
-              cat .circleci/ansible/inventory.txt
       - run:
           name: Configure server  
           command: |
-
-            export ANSIBLE_HOST_KEY_CHECKING=False
-
-            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
 
@@ -366,21 +358,21 @@ jobs:
 workflows:
   default:
     jobs:
-#      - build-frontend
-#      - build-backend
+      - build-frontend
+      - build-backend
     #  - test-frontend:
     #      requires: [build-frontend]
     #  - test-backend:
     #      requires: [build-backend]
-    #  - scan-frontend:
-    #      requires: [build-frontend]
-    #  - scan-backend:
-    #      requires: [build-backend]
-#      - deploy-infrastructure:
+      - scan-frontend:
+          requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
+      - deploy-infrastructure:
 #          requires: [build-frontend, build-backend]
-    #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure
-#          requires: [deploy-infrastructure]
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
 #      - run-migrations:
 #          requires: [configure-infrastructure]
 #      - deploy-frontend:
