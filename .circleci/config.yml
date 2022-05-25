@@ -200,8 +200,8 @@ jobs:
           command: |
             cd .circleci/ansible
             export ANSIBLE_HOST_KEY_CHECKING=False
-            cat .circleci/ansible/inventory.txt
-            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+
+            ansible-playbook -i inventory.txt configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
 
