@@ -188,11 +188,19 @@ jobs:
             pip install awscli --upgrade
           #exit 1
       - run:
+          name: Check back-end ip and save to ansible inventory
+          command: |
+
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> .circleci/ansible/inventory.txt
+              cat .circleci/ansible/inventory.txt
+      - run:
           name: Configure server  
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
-            cat /tmp/backend/inventory.txt
-            ansible-playbook -i /tmp/backend/inventory.txt .circleci/ansible/configure-server.yml
+            cat .circleci/ansible/inventory.txt
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
 
