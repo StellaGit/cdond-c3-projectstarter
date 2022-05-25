@@ -356,8 +356,8 @@ jobs:
 workflows:
   default:
     jobs:
-#      - build-frontend
-#      - build-backend
+      - build-frontend
+      - build-backend
     #  - test-frontend:
     #      requires: [build-frontend]
     #  - test-backend:
@@ -366,18 +366,18 @@ workflows:
     #      requires: [build-frontend]
     #  - scan-backend:
     #      requires: [build-backend]
-#      - deploy-infrastructure:
-#          requires: [build-frontend, build-backend]
+      - deploy-infrastructure:
+          requires: [build-frontend, build-backend]
     #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-#      - configure-infrastructure:
-#          requires: [deploy-infrastructure]
-#      - run-migrations:
-#          requires: [configure-infrastructure]
-#      - deploy-frontend:
-#          requires: [run-migrations]
-#      - deploy-backend:
-#          requires: [run-migrations]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
         #  requires: [configure-infrastructure]
-      - smoke-test
-#          requires: [deploy-backend, deploy-frontend]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
         #  requires: [deploy-backend]
