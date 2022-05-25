@@ -208,16 +208,10 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Run scripts
+          name: Run migrations
           command: |
             cd backend
             npm install
-
-            sudo apt-get update              
-            sudo apt-get install awscli
-      - run:
-          name: Run migrations
-          command: |
             npm run migrations > migrations_dump.txt
 
           #  exit 1
