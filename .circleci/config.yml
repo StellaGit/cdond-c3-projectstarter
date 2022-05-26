@@ -42,6 +42,7 @@ commands:
                 # Logic for reverting the database state
                 if (( $SUCCESS == 1 ));
                 then
+                    pwd
                     cd ~/project/backend
                     npm install
                     npm run migration:revert
@@ -391,10 +392,12 @@ jobs:
             else
             return 1
             fi
+
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}            
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 workflows:
   default:
     jobs:
