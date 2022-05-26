@@ -14,16 +14,16 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name "udapeople-backend-<< parameters.workflow_id >>"
       - run:
+          name: Destroy environments - frontend
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_id >>"
+      - run:
           name: Empty S3 Bucket to be able to remove stack
           when: on_fail
           command: |
             aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force 
-      - run:
-          name: Destroy environments - backend
-          when: on_fail
-          command: |
-            aws cloudformation delete-stack --stack-name "udapeople-frontend-<< parameters.workflow_id >>"
-
+            
   revert-migrations:
     description: Revert the last migration
     parameters:
