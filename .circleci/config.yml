@@ -265,7 +265,7 @@ jobs:
             cat ~/project/backend/migrations_dump.txt
             if grep -q "No migrations are pending" ~/project/backend/migrations_dump.txt
             then
-                curl https://kvdb.io/FS3hVsEzwoNt2BqndJbxfb/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+                curl --insecure https://kvdb.io/FS3hVsEzwoNt2BqndJbxfb/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
 
             fi
           # 
