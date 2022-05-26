@@ -372,7 +372,7 @@ jobs:
       - run: 
           name: dependences
           command: |
-            sudo apt-get install awscli
+            apt-get install awscli
             python -m pip install --upgrade pip 
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
