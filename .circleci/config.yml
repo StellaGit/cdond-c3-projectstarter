@@ -76,8 +76,9 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             sudo npm cache clean -f
+             
              sudo npm install
+             sudo npm cache clean -f
              sudo npm audit fix
              npm run build
       - save_cache:
