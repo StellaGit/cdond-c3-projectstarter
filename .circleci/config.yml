@@ -374,7 +374,7 @@ jobs:
           command: |            
             python -m pip install --upgrade pip 
             pip install awscli --upgrade
-            apt install curl
+            apk add curl
       - run:
           name: smoke test - backend           #  export API_URL="http://${BACKEND_IP}:3030"
           command: |
