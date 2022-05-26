@@ -76,9 +76,8 @@ jobs:
           name: Back-end build
           command: |
              cd backend
-             apt-get update             
+             
              npm install
-
              npm audit fix
              npm run build
 #      - save_cache:
