@@ -35,7 +35,7 @@ commands:
             when: on_fail
             command: |
 
-                SUCCESS=$(curl --insecure  https://kvdb.io/FS3hVsEzwoNt2BqndJbxfb/migration_)
+                SUCCESS=$(curl --insecure  https://kvdb.io/FS3hVsEzwoNt2BqndJbxfb/migration_<< parameters.workflow_id >>)
                 echo $SUCCESS
                 if (( $SUCCESS == 1 ));
                 then
@@ -402,11 +402,11 @@ jobs:
             else
             return 1
             fi
-
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}            
+           
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   cloudfront-update:
     docker:
