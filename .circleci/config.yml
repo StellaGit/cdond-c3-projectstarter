@@ -181,6 +181,7 @@ jobs:
           command: |
 
             aws ec2 describe-instances \
+              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> .circleci/ansible/inventory.txt
               cat .circleci/ansible/inventory.txt
@@ -208,19 +209,16 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk update
-            apk upgrade
-            apk add tar gzip
-            python -m pip install --upgrade pip
+            apk add --update tar gzip ansible nodejs npm
             pip install awscli --upgrade
-            apk add --update ansible
+
           #exit 1
 
       - run:
           name: Configure server  
           command: |
             cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt configure-server.yml
           #  exit 1
       # Here's where you will add some code to rollback on failure      
       - destroy-environment:
@@ -297,6 +295,7 @@ jobs:
           name: Get backend url
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030" 
